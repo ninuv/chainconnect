@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            font-family: "Nunito", sans-serif;
+        }
+        main{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .login-container{
+            width: 500px;
+            height: 500px;
+            display: grid;
+            grid-template-rows: 70px auto;
+        }
+        .name-container h2{
+            display: flex;
+            justify-content: center;
+        }
+        .form-container{
+            width: 100%;
+            display: grid;
+            grid-template-rows: 40px auto 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+        }
+        .top{
+            background-color: rgb(90, 135, 231);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .message-box{
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .bottom{
+            background-color: rgb(90, 135, 231);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        .to-register-box{
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .to-register-box a{
+            color: white;
+            text-decoration: underline;
+        }
+        form{
+            display: flex;
+            justify-content: center;
+        }
+        .data{
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        .input{
+            width: 80%;
+            height: 30px;
+            padding-right: 0;
+        }
+        .username-input{
+            width: 70%;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            padding-right: 16px;
+        }
+        .username{
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+            border-style: solid;
+            border-width: 1px;
+            border-color: grey;
+        }
+        .at-btn{
+            height: 100%;
+            width: 36px;
+            font-size: 20px;
+            background-color: white;
+            border-style: solid;
+            border-width: 1px;
+            border-color: grey;
+            border-right: none;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        .register-btn{
+            width: 78px;
+            height: 30px;
+            background-color: rgb(90, 135, 231);
+            color: white;
+            border: none;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .register-btn:hover{
+            background-color: rgb(60, 105, 201);
+        }
+        .register-btn:active{
+            background-color: rgb(40, 85, 181);
+        }
+    </style>
+    <title>Register</title>
+</head>
+<body>
+    <main>
+        <div class="login-container">
+            <div class="name-container"><h2>Social Media</h2></div>
+            <div class="form-container">
+                <div class="top">
+                    <div class="message-box">{% if message %} {{ message }} {% endif %}</div>
+                </div>
+                <form method="POST">
+                    <div class="data">
+                        <input type="text" class="fullname input" id="fullname" name="fullname" placeholder="Full Name" value="{{ fullname }}" required>
+                        <div class="username-input">
+                            <button class="at-btn">@</button>
+                            <input type="text" class="username input" id="username" name="username" placeholder="Username" value="{{ username }}" required>
+                        </div>
+                        <input type="email" class="email input" id="email" name="email" placeholder="E-Mail" value="{{ email }}" required>
+                        <input type="password" class="password input" id="password" name="password" placeholder="Password" required>
+                        <input type="password" class="repeat-password input" id="repeat-password" name="repeat-password" placeholder="Repeat Password" required>
+                        <button type="submit" class="register-btn">Register</button>
+                    </div>
+                </form>
+                <div class="bottom"></div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

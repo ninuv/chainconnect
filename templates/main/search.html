@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .all{
+            max-width: 750px;
+            width: 60%;
+        }
+        main{
+            height: fit-content;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+            padding-bottom: 10px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .search-line{
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-bottom-color: lightgrey;
+        }
+        .searchbox{
+            width: fit-content;
+        }
+        .search-input{
+            margin: 0;
+            height: 24px;
+            border-radius: none;
+            border-style: solid;
+            border-bottom-left-radius: 8px;
+            border-top-left-radius: 8px;
+            border-color: lightgrey;
+            border-right: none;
+            outline: none;
+        }
+        .search-input:hover{
+            border-color: darkgrey;
+        }
+        .search-input:active{
+            border-color: darkgrey;
+        }
+        .search-btn{
+            margin: 0;
+            height: 30px;
+            padding-top: 1px;
+            padding-bottom: 1px;
+            background-color: rgb(90, 135, 231);
+            color: white;
+            border: none;
+            font-weight: 900;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            cursor: pointer;
+        }
+        .search-btn:hover{
+            background-color: rgb(60, 105, 201);
+        }
+        .search-btn:active{
+            background-color: rgb(40, 85, 181);
+        }
+
+        .user-box{
+            display: grid;
+            grid-template-columns: 70px auto;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 40px;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-bottom-color: lightgrey;
+        }
+        .profile-picture-side{
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-pic{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: black;
+        }
+        .name-and-follow-btn-side{
+            display: grid;
+            grid-template-columns: auto 120px;
+        }
+        .username-box{
+            font-weight: 900;
+        }
+        .username-box a{
+            text-decoration: none;
+            color: black;
+        }
+        .follow-btn-side{
+            display: flex;
+            align-items: center;
+        }
+
+        .func-btn{
+            height: 28px;
+            background-color: rgb(90, 135, 231);
+            border-style: solid;
+            border-color: rgb(90, 135, 231);
+            border-width: 2px;
+            color: white;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .func-btn:hover{
+            background-color: rgb(60, 105, 201);
+            border-color: rgb(60, 105, 201);
+        }
+        .func-btn:active{
+            background-color: rgb(40, 85, 181);
+            border-color: rgb(40, 85, 181);
+        }
+        .func-btn-rev{
+            height: 28px;
+            background-color: white;
+            color: rgb(60, 105, 201);
+            border-style: solid;
+            border-color: rgb(90, 135, 231);
+            border-width: 2px;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .func-btn-rev:hover{
+            background-color: rgb(60, 105, 201);
+            border-color: rgb(60, 105, 201);
+            color: white;
+        }
+        .func-btn-rev:active{
+            background-color: rgb(40, 85, 181);
+            border-color: rgb(40, 85, 181);
+            color: white;
+        }
+    </style>
+    <title>{{ t('Search') }}</title>
+</head>
+<body>
+    <div class="all">
+        {% include 'basis/base.html' %}
+        <main>
+            {% include 'basis/inter-nav.html' %}
+            <div class="actual-search"> <!-- The actual page code starts here -->
+                <div class="search-line">
+                    <div class="searchbox">
+                        <form method="POST" id="searchform">
+                            <input type="text" name="searchterm" id="search-input" class="search-input" placeholder="{{ t('Search People') }}" value="{{ searchterm }}" required autofocus><button class="search-btn" onclick="saveSearchTerm()">{{ t('Search') }}</button>
+                        </form>
+                    </div>
+                </div>
+                {% if users != '' %}
+                {% for user in users %}
+                {% if current_user not in user.blocked_users %}
+                    <div class="user-box">
+                        <div class="profile-picture-side">
+                            <div class="profile-pic"></div>
+                        </div>
+                        <div class="name-and-follow-btn-side">
+                            <div class="name-side">
+                                <div class="username-box"><a href="{{ url_for('user', username=user.username) }}">{{ user.username }}</a></div>
+                                <div class="fullname-box">{{ user.fullname }}</div>
+                                <div class="how-many-followers-box">- {{ user.followed_by.count() }} {{ t('Followers') }}</div>
+                            </div>
+                            <div class="follow-btn-side">
+                            {% if current_user.role != 0 %}
+                                {% if user == current_user %}
+                                <div class="func-btn-box edit-profile-btn"><a href="{{ url_for('edit_profile_data', id=user.id) }}"><button class="func-btn">{{ t('Edit Profile') }}</button></a></div>
+                                {% else %}
+                                    {% if user in current_user.following %}
+                                    <a href="{{ url_for('unfollow', user_id=user.id) }}"><button class="func-btn-rev">{{ t('Unfollow') }}</button></a>
+                                    {% else %}
+                                    <a href="{{ url_for('follow', user_id=user.id) }}"><button class="func-btn">{{ t('Follow') }}</button></a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </div>                    <!--  The actual page code ends here  -->
+        </main>
+    </div>
+    <script>
+
+        const input_bar = document.getElementById('search-input');
+        let settext = localStorage.getItem("searchterm");
+        input_bar.value = settext;
+
+
+        function saveSearchTerm(){
+            const input_text = document.getElementById('search-input').value;
+            //console.log(input_bar.innerText);
+            localStorage.setItem("searchterm", input_text);
+            console.log(input_text)
+        }
+
+    </script>
+</body>
+</html>

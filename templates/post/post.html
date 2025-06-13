@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        main{
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+            padding-bottom: 10px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .post-box{
+            display: grid;
+            grid-template-columns: 80px auto;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            width: 100%;
+            border-bottom-style: solid;
+            border-bottom-color: lightgrey;
+            border-bottom-width: 1px;
+        }
+        .picture-box{
+            background-color: black;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+        }
+        .profile-picture-side{
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+        }
+        .profile-picture-side-comment{
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+        }
+        @media(max-width: 700px){
+            .post-box{
+                grid-template-columns: 60px auto;
+            }
+            .picture-box{
+                height: 40px;
+                width: 40px;
+            }
+            .profile-picture-side{
+                justify-content: center;
+            }
+            .profile-picture-side-comment{
+                justify-content: end;
+            }
+        }
+        .name-and-content-side{
+            width: 94%;
+            display: grid;
+            grid-template-rows: 30px fit-content 30px;
+            margin-left: 10px;
+        }
+        .username-box{
+            width: 100%;
+            height: 30px;
+            font-weight: 900;
+            display: flex;
+            align-items: end;
+            margin-bottom: 0;
+        }
+        .post-timestamp{
+            font-weight: 100;
+            font-size: 14px;
+            color: grey;
+        }
+        .username-box a{
+            text-decoration: none;
+            color: black;
+            margin-right: 14px;
+        }
+        .content-box{
+            width: 100%;
+            padding-right: 10px;
+            display: block;
+            overflow-wrap: anywhere;
+        }
+        .content-box p{
+            display: block;
+            margin: 0;
+        }
+        .like-btn, .comment-btn{
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        .write-a-comment{
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-bottom-color: lightgrey;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 8px;
+        }
+        .write-a-comment form{
+            width: 80%;
+        }
+        .text-box{
+            margin-top: 30px;
+            margin-bottom: 8px;
+            width: 100%;
+            resize: none;
+            font-family: "Nunito", sans-serif;
+            overflow:visible;
+            border: none;
+            outline: none;
+        }
+        .publish-comment-btn{
+            width: fit-content;
+            height: 30px;
+            background-color: rgb(90, 135, 231);
+            color: white;
+            border: none;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .publish-comment-btn:hover{
+            background-color: rgb(60, 105, 201);
+        }
+        .publish-comment-btn:active{
+            background-color: rgb(40, 85, 181);
+        }
+
+        .comment-section{
+            overflow: hidden;
+            width: 100%;
+        }
+        .comment-box{
+            display: grid;
+            grid-template-columns: 80px auto;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            width: 93%;
+            padding-left: 7%;
+            border-bottom-style: solid;
+            border-bottom-color: lightgrey;
+            border-bottom-width: 1px;
+        }
+        @media(max-width: 700px){
+            .comment-box{
+                width: 98%;
+                padding-left: 2%;
+            }
+        }
+    </style>
+    <title>Post</title>
+</head>
+<body>
+    <div class="all">
+        {% include 'basis/base.html' %}
+        <main>
+            {% include 'basis/inter-nav.html' %}
+            <div class="actual-post-page">      <!-- the actual code for the page starts here -->
+                <div class="main-post-emblem">
+                    <div class="post-box">
+                        <div class="profile-picture-side">
+                            <div class="picture-box"></div>
+                        </div>
+                        <div class="name-and-content-side">
+                            <div class="username-box"><a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>  <div class="post-timestamp">{{ post.timestamp.strftime('%d/%m/%y') }}</div></div>
+                            <div class="content-box">
+                                <p>{{ post.content.replace('\n', '<br>')|safe }}</p>
+                            </div>
+                            <div class="like-and-comment-box">
+                                {% if current_user.role != 0 %}
+                                <button class="like-btn {% if post in current_user.liked_posts %} liked {% endif %}" id="like-btn-{{ post.id }}" onclick="likePost('{{ post.id }}')">
+                                    {% if post in current_user.liked_posts %}
+                                    ❤️
+                                    {% else %}
+                                    🖤
+                                    {% endif %}
+                                    <span id="like-count-{{ post.id }}">{{ post.like_count }}</span>
+                                </button>
+                                {% endif %}
+                                <a href="{{ url_for('post', id=post.id) }}">
+                                <button class="comment-btn">
+                                    🗨️<span> {{ post.comments.count() }}</span>
+                                </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if current_user.role != 0 %}
+                <div class="write-a-comment">
+                    <form method="POST">
+                        <textarea class="text-box" placeholder="{{ t('Write a comment...') }}" name="comment-content" id="text" row="1" required autofocus></textarea>
+                        <button class="publish-comment-btn" type="submit">{{ t('Comment') }}</button>
+                    </form>
+                </div>
+                {% endif %}
+
+                <div class="comment-section">
+                    {% for comment in comments %}
+                    {% if comment.author not in current_user.blocked_users %}
+                    
+                    <div class="comment-box" id="{{ comment.id }}">
+                        <div class="profile-picture-side-comment">
+                            <div class="picture-box"></div>
+                        </div>
+                        <div class="name-and-content-side">
+                            <div class="username-box"><a href="{{ url_for('user', username=comment.author.username) }}">{{ comment.author.username }}</a>  <div class="post-timestamp">{{ comment.timestamp.strftime('%d/%m/%y') }}</div></div>
+                            <div class="content-box">
+                                <p>{{ comment.content.replace('\n', '<br>')|safe }}</p>
+                            </div>
+                            <div class="like-and-comment-box">
+                                {% if current_user.role != 0 %}
+                                    <button class="like-btn">
+                                        🖤<span> 0</span>
+                                    </button>
+                                {% endif %}
+                                <a>
+                                    <button class="comment-btn">
+                                        🗨️<span> {{ comment.replies.count() }}</span>
+                                    </button>
+                                </a>
+                                {% if current_user == comment.author and current_user.role != 0 %}
+                                <a class="delete-comment-link" href="{{ url_for('delete_comment', id=comment.id) }}" style="color: red;">
+                                    del
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>                              <!-- the code ends here -->
+        </main>
+    </div>
+    <script>
+
+        document.querySelectorAll("textarea").forEach(function(textarea) {
+            textarea.style.height = textarea.scrollHeight + 'px';
+            textarea.style.overflowY = 'hidden';
+
+            textarea.addEventListener("input", function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        });
+
+
+
+
+        function likePost(postId){
+            const button = document.getElementById(`like-btn-${postId}`);
+            const countSpan = document.getElementById(`like-count-${postId}`);
+
+            let currentCount = parseInt(countSpan.innerText, 10);
+            const liked = button.classList.contains('liked');
+            
+            // disable button briefly to avoid spamming
+            button.disabled = true;
+            if (liked){
+                // decrease count of like
+                const buttonTextNode = button.childNodes[0];
+                if (buttonTextNode.nodeType === Node.TEXT_NODE){
+                    buttonTextNode.nodeValue = '🖤 ';
+                }
+                countSpan.innerText = currentCount - 1;
+                button.classList.remove('liked');
+            } else {
+                // increase count of like
+                const buttonTextNode = button.childNodes[0];
+                if (buttonTextNode.nodeType === Node.TEXT_NODE){
+                    buttonTextNode.nodeValue = '❤️ ';
+                }
+                countSpan.innerText = currentCount + 1;
+                button.classList.add('liked');
+            }
+
+
+            fetch('/api/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ post_id: postId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // adjust if backend doesn't respond correctly
+                if (data.liked !== !liked){
+                    countSpan.innerText = liked ? currentCount + 1 : currentCount - 1;
+                    button.classList.toggle('liked');
+                }
+            })
+            .catch(() => {
+                // Revert UI on error
+                countSpan.innerText = currentCount;
+                if (liked){
+                    button.classList.add('liked');
+                }
+                else {
+                    button.classList.remove('liked');
+                }
+            });
+
+            // button enable
+            button.disabled = false;
+        }
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .logo-container{
+            display: none;
+        }
+        nav{
+            height: 50px;
+        }
+        main{
+            height: 140px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .message-box{
+            background-color: rgb(90, 135, 231);
+            display: flex;
+            justify-content: center;
+            color: white;
+        }
+        .bottom{
+            height: 50px;
+            background-color: rgb(90, 135, 231);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lang-btn{
+            width: fit-content;
+            height: 30px;
+            background-color: rgb(90, 135, 231);
+            color: white;
+            border: none;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .lang-btn:hover{
+            background-color: rgb(60, 105, 201);
+        }
+        .lang-btn:active{
+            background-color: rgb(40, 85, 181);
+        }
+
+        .save-settings-btn{
+            width: fit-content;
+            height: 30px;
+            background-color: white;
+            color: black;
+            border: none;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .save-settings-btn:hover{
+            background-color: rgb(235, 235, 235);
+        }
+        .save-settings-btn-btn:active{
+            background-color: rgb(40, 85, 181);
+        }
+    </style>
+    <title>Settings</title>
+</head>
+<body>
+    <div class="all">
+        {% include 'basis/base.html' %}
+        {% if message %}
+        <div class="message-box">{{ message }}</div>
+        {% endif %}
+        <main>
+            <h2>{{ t('Change Language') }}</h2>
+            <div>
+                <a href="{{ url_for('change_language', lang='eng') }}"><button class="lang-btn">{{ t('English') }}</button></a>
+                <a href="{{ url_for('change_language', lang='deu') }}"><button class="lang-btn">{{ t('German') }}</button></a>
+                <a href="{{ url_for('change_language', lang='ser') }}"><button class="lang-btn">{{ t('Serenic') }}</button></a>
+                <a><button class="lang-btn">{{ t('Swedish') }}</button></a>
+            </div>
+        </main>
+        <div class="bottom">
+            <a href="{{ url_for('user', username=current_user.username) }}"><button class="save-settings-btn">{{ t('Save') }}</button></a>
+        </div>
+    </div>
+</body>
+</html>

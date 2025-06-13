@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .all{
+            max-width: 750px;
+            width: 60%;
+        }
+        main{
+            height: fit-content;
+            padding-bottom: 50px;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .actual-create{
+            display: flex;
+            justify-content: center;
+        }
+        .post-field-container{
+            width: 90%;
+        }
+        .text-box{
+            margin-top: 30px;
+            margin-bottom: 10px;
+            width: 100%;
+            resize: none;
+            font-family: "Nunito", sans-serif;
+            overflow:visible;
+            border: none;
+            outline: none;
+        }
+        .post-btn{
+            width: 70px;
+            height: 30px;
+            background-color: rgb(90, 135, 231);
+            color: white;
+            border: none;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .post-btn:hover{
+            background-color: rgb(60, 105, 201);
+        }
+        .post-btn:active{
+            background-color: rgb(40, 85, 181);
+        }
+
+    </style>
+    <title>{{ t('Create') }} [Uf/v4]</title>
+</head>
+<body>
+    <div class="all">
+        {% include 'basis/base.html' %}
+        <main>
+            {% include 'basis/inter-nav.html' %}
+            <div class="actual-create"> <!-- The actual page code starts here -->
+                <div class="post-field-container">
+                    {% if current_user.role != 0 %}
+                    <form method="POST">
+                        {% if current_user.app_lang == 'deu' %}
+                        <textarea class="text-box" placeholder="Du hast {{ current_user.followed_by.count() }} Freunde, {{ current_user.fullname }}. Du solltest ihnen etwas posten..." name="post-content" id="text" row="1" required autofocus></textarea>
+                        {% else %}
+                        <textarea class="text-box" placeholder="{{ t('Share what you think...') }}" name="post-content" id="text" row="1" required autofocus></textarea>
+                        {% endif %}
+                        <button class="post-btn" type="submit">{{ t('Post') }}</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>                    <!--  The actual page code ends here  -->
+        </main>
+    </div>
+    <script>
+
+        document.querySelectorAll("textarea").forEach(function(textarea) {
+            textarea.style.height = textarea.scrollHeight + 'px';
+            textarea.style.overflowY = 'hidden';
+
+            textarea.addEventListener("input", function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        });
+
+    </script>
+</body>
+</html>

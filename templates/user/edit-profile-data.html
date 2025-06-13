@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        h4{
+            margin: 0;
+            margin-top: 14px;
+        }
+        nav{
+            height: 50px;
+        }
+        .logo-container{
+            display: none;
+        }
+        main{
+            height: 700px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+            display: flex;
+            justify-content: center;
+            padding-top: 40px;
+            padding-bottom: 10px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .message-box{
+            background-color: rgb(90, 135, 231);
+            color: white;
+            display: flex;
+            justify-content: center;
+        }
+        .info-change-form{
+            width: 50%;
+        }
+        .info-change-form input{
+            width: 95%;
+            height: 30px;
+        }
+        .info-change-form textarea{
+            width: 95%;
+            height: 200px;
+            resize: none;
+        }
+        .save-btn{
+            margin-top: 40px;
+            margin-right: 20px;
+            width: fit-content;
+            height: 30px;
+            background-color: rgb(90, 135, 231);
+            color: white;
+            border: none;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .save-btn:hover{
+            background-color: rgb(60, 105, 201);
+        }
+        .save-btn:active{
+            background-color: rgb(40, 85, 181);
+        }
+
+        .back-arrow{
+            text-decoration: none;
+            color: black;
+        }
+        .bio{
+            font-family: "Nunito", sans-serif;
+        }
+    </style>
+    <title>Edit Profile Data</title>
+</head>
+<body>
+    <div class="all">
+        {% include 'basis/base.html' %}
+        {% if message %}
+        <div class="message-box">{{ message }}</div>
+        {% endif %}
+        <main>
+            <div></div>
+            <form class="info-change-form" method="POST">
+                <h4>{{ t('Name') }}</h4>
+                <input type="text" class="fullname input" name="fullname" value="{{ user.fullname }}" placeholder="{{ t('Name') }}" required>
+                <h4>{{ t('Username') }}</h4>
+                <input type="text" class="username input" name="username" value="{{ user.username }}" placeholder="{{ t('Username') }}" required>
+                <h4>{{ t('Pronouns') }}</h4>
+                {% if user.pronouns == None %}
+                <input type="text" class="pronouns input" name="pronouns" value="" placeholder="{{ t('Pronouns') }}">
+                {% else %}
+                <input type="text" class="pronouns input" name="pronouns" value="{{ user.pronouns }}" placeholder="{{ t('Pronouns') }}">
+                {% endif %}
+                <h4>{{ t('E-Mail') }}</h4>
+                <input type="email" class="email input" name="email" value="{{ user.email }}" placeholder="{{ t('E-Mail') }}" required>
+                <h4>{{ t('Bio') }}</h4>
+                {% if user.bio %}
+                <textarea class="bio input" name="bio" placeholder="{{ t('Your Bio') }}">{{ user.bio }}</textarea>
+                {% else %}
+                <textarea class="bio input" name="bio" placeholder="{{ t('Your Bio') }}"></textarea>
+                {% endif %}
+                {% if current_user.role >= 4 and user != current_user %}
+                <input type="text" style="width: 60px;" placeholder="Role" name="role" value="{{ user.role }}">
+                {% endif %}
+                <br>
+                <button class="save-btn" type="submit">{{ t('Save') }}</button><a href="{{ url_for('user', username=user.username) }}" class="back-arrow">← {{ t('Back') }}</a>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

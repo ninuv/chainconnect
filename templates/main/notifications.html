@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .all{
+            max-width: 750px;
+            width: 60%;
+        }
+        main{
+            height: fit-content;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+            padding-bottom: 10px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .note-box{
+            display: grid;
+            grid-template-columns: 70px auto;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 40px;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-bottom-color: lightgrey;
+        }
+        .profile-picture-side{
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-pic{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: black;
+        }
+        .name-and-follow-btn-side{
+            display: grid;
+            grid-template-columns: auto 120px;
+        }
+        .name-side{
+            display: flex;
+            align-items: center;
+            padding-left: 4%;
+        }
+        @media(max-width: 800px){
+            .note-box{
+                padding-left: 10px;
+            }
+            .name-and-follow-btn-side{
+                grid-template-columns: auto 80px;
+            }
+            .name-side{
+                padding-left: 0;
+            }
+        }
+        .username-box a{
+            font-weight: 900;
+            text-decoration: none;
+            color: black;
+        }
+        .post-link{
+            text-decoration: none;
+        }
+
+    </style>
+    <title>{{ t('Notes') }}</title>
+</head>
+<body>
+    <div class="all">
+        {% include 'basis/base.html' %}
+        <main>
+            {% include 'basis/inter-nav.html' %}
+            <div class="actual-notifications"> <!-- The actual page code starts here -->
+                {% for notification in notifications %}
+                {% if notification.toggler not in current_user.blocked_users and current_user not in notification.toggler.blocked_users %}
+                <div class="note-box">
+                        <div class="profile-picture-side">
+                            <div class="profile-pic"></div>
+                        </div>
+                        <div class="name-and-follow-btn-side">
+                            <div class="name-side">
+                                <div class="username-box">
+                                    {% if notification.event_id != 'SYYTR' and notification.event_id != 'SYYUR' %}
+                                    <a href="{{ url_for('user', username=notification.toggler.username) }}">
+                                        {{ notification.toggler.username }}
+                                    </a>
+                                    {% endif %}
+                                    {% if notification.post_id %}
+                                    <a href="{{ url_for('post', id=notification.post_id) }}#{{ notification.comment_id }}" style="font-weight: 400;">
+                                        {{ note_event[current_user.app_lang][notification.event_id][1].replace('*', '<b>').replace('~', '</b>')|safe }}
+                                    </a>
+                                    {% else %}
+                                        {% if notification.event_id == 'SYYTR' %}
+                                        {{ note_event[current_user.app_lang][notification.event_id][1] }}
+                                        {% else %}
+                                        {{ note_event[current_user.app_lang][notification.event_id][1].replace('*', '<b>').replace('~', '</b>')|safe }}
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% endfor %}
+            </div>                    <!--  The actual page code ends here  -->
+        </main>
+    </div>
+</body>
+</html>

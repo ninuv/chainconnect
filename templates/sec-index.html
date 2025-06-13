@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+        main{
+            height: fit-content;
+            padding-bottom: 10px;
+            background-color: rgb(255, 255, 255);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+        }
+
+        .actual-home-following{
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .choice-layer{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .choice-layer a{
+            text-decoration: none;
+            color: black;
+        }
+        .choice-layer-choice{
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .following-tab{
+            border-left-style: solid;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+            border-bottom-color: lightgrey;
+            border-left-color: lightgrey;
+        }
+        .feed-tab{
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-bottom-color: lightgrey;
+            border-right-style: solid;
+            border-right-width: 1px;
+            border-right-color: lightgrey;
+        }
+        .post-box{
+            display: grid;
+            grid-template-columns: 80px auto;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            width: 100%;
+            border-bottom-style: solid;
+            border-bottom-color: lightgrey;
+            border-bottom-width: 1px;
+        }
+        .picture-box{
+            background-color: black;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+        }
+        .profile-picture-side{
+            width: 80px;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+        }
+        @media(max-width: 700px){
+            .post-box{
+                grid-template-columns: 60px auto;
+            }
+            .picture-box{
+                height: 40px;
+                width: 40px;
+            }
+            .profile-picture-side{
+                justify-content: center;
+            }
+        }
+        .name-and-content-side{
+            width: 94%;
+            display: grid;
+            grid-template-rows: 30px fit-content 30px;
+            margin-left: 10px;
+        }
+        .username-box{
+            width: 100%;
+            height: 30px;
+            font-weight: 900;
+            display: flex;
+            align-items: end;
+            margin-bottom: 0;
+        }
+        .post-timestamp{
+            font-weight: 100;
+            font-size: 14px;
+            color: grey;
+        }
+        .username-box a{
+            text-decoration: none;
+            color: black;
+            margin-right: 14px;
+        }
+        .content-box{
+            width: 100%;
+            padding-right: 10px;
+            padding-top: -100px;
+            display: block;
+            overflow-wrap: anywhere;
+        }
+        .content-box p{
+            display: block;
+            margin: 0;
+        }
+        .like-btn, .comment-btn{
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <title>{{ t('Home') }} [Uf/v4]</title>
+</head>
+<body>
+    <div class="all">
+        {% include 'basis/base.html' %}
+        <main>
+            {% include 'basis/inter-nav.html' %}
+            <div class="actual-home" id="actual-home"> <!-- The actual page code starts here (feed) -->
+                <div class="choice-layer">
+                    <a href="{{ url_for('home') }}"><div class="choice-layer-choice feed-tab" id="feed-tab">{{ t('Feed') }}</div></a>  <div class="choice-layer-choice" id="following-tab" onclick="expand_following()">{{ t('Following') }}</div>
+                </div>
+
+                <div class="feed">
+                    {% for post in posts %}
+                    {% if post.author in current_user.following %}
+                    <div class="post-box">
+                        <div class="profile-picture-side">
+                            <div class="picture-box"></div>
+                        </div>
+                        <div class="name-and-content-side">
+                            <div class="username-box"><a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>  <div class="post-timestamp">{{ post.timestamp.strftime('%d/%m/%y') }}</div></div>
+                            <div class="content-box">
+                                <p>{{ post.content.replace('\n', '<br>')|safe }}</p>
+                            </div>
+                            <div class="like-and-comment-box">
+                                {% if current_user.role != 0 %}
+                                <button class="like-btn {% if post in current_user.liked_posts %} liked {% endif %}" id="like-btn-{{ post.id }}" onclick="likePost('{{ post.id }}')">
+                                    {% if post in current_user.liked_posts %}
+                                    ❤️
+                                    {% else %}
+                                    🖤
+                                    {% endif %}
+                                    <span id="like-count-{{ post.id }}">{{ post.like_count }}</span>
+                                </button>
+                                {% endif %}
+                                <button class="comment-btn">
+                                    🗨️<span>{{ post.comments.count() }}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="following"></div>
+            </div>                    <!--  The actual page code ends here  -->
+        </main>
+    </div>
+    <script>
+       
+        function likePost(postId){
+            const button = document.getElementById(`like-btn-${postId}`);
+            const countSpan = document.getElementById(`like-count-${postId}`);
+
+            let currentCount = parseInt(countSpan.innerText, 10);
+            const liked = button.classList.contains('liked');
+            
+            // disable button briefly to avoid spamming
+            button.disabled = true;
+            if (liked){
+                // decrease count of like
+                const buttonTextNode = button.childNodes[0];
+                if (buttonTextNode.nodeType === Node.TEXT_NODE){
+                    buttonTextNode.nodeValue = '🖤 ';
+                }
+                countSpan.innerText = currentCount - 1;
+                button.classList.remove('liked');
+            } else {
+                // increase count of like
+                const buttonTextNode = button.childNodes[0];
+                if (buttonTextNode.nodeType === Node.TEXT_NODE){
+                    buttonTextNode.nodeValue = '❤️ ';
+                }
+                countSpan.innerText = currentCount + 1;
+                button.classList.add('liked');
+            }
+
+
+            fetch('/api/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ post_id: postId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // adjust if backend doesn't respond correctly
+                if (data.liked !== !liked){
+                    countSpan.innerText = liked ? currentCount + 1 : currentCount - 1;
+                    button.classList.toggle('liked');
+                }
+            })
+            .catch(() => {
+                // Revert UI on error
+                countSpan.innerText = currentCount;
+                if (liked){
+                    button.classList.add('liked');
+                }
+                else {
+                    button.classList.remove('liked');
+                }
+            });
+
+            // button enable
+            button.disabled = false;
+        }
+
+    </script>
+</body>
+</html>

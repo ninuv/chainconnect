@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .all{
+            max-width: 750px;
+            width: 60%;
+        }
+        main{
+            height: fit-content;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+            padding-bottom: 10px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .user-box{
+            padding-top: 20px;
+            padding-bottom: 10px;
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-bottom-color: lightgrey;
+        }
+        .profile-pic-box{
+            display: flex;
+            justify-content: end;
+        }
+        @media(max-width: 750px){
+            .profile-pic-box{
+                padding-left: 10px;
+            }
+        }
+        .profile-pic{
+            width: 120px;
+            height: 120px;
+            background-color: black;
+            border-radius: 50%;
+        }
+        .name-and-description-box{
+            display: grid;
+            grid-template-rows: 28px auto;
+        }
+        .name-and-pronouns-box{
+            display: flex;
+            align-items: end;
+            justify-content: start;
+            gap: 10px;
+        }
+        .fullname{
+            padding-left: 10.89%;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: fit-content;
+            font-weight: 900;
+            font-size: 20px;
+        }
+        .pronouns{
+            margin-left: 10px;
+            color: lightgrey;
+            font-weight: 100;
+            display: flex;
+            flex-direction: row;
+            
+        }
+        .user-option{
+            width: fit-content;
+            background-color: transparent;
+            border: none;
+            font-size: 20px;
+            font-weight: 900;
+            font-family: "Nunito", sans-serif;
+        }
+        .user-option option{
+            font-size: 16px;
+            font-weight: 100;
+            width: fit-content;
+        }
+        .stats-box{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .stats-div{
+            display: flex;
+            justify-content: center;
+        }
+        .stats-box-content{
+            width: fit-content;
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+        }
+        .stats-number{
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            font-weight: 900;
+            font-size: 28px;
+        }
+
+
+        .functional-btns{
+            height: fit-content;
+            padding-top: 10px;
+            display: flex;
+            justify-content: end;
+        }
+        .func-btn-box{
+            width: 120px;
+            display: flex;
+            justify-content: center;
+        }
+        .func-btn-box a, .func-btn, .func-btn-rev{
+            width: 100%;
+            cursor: pointer;
+        }
+        .func-btn{
+            height: fit-content;
+            min-height: 28px;
+            background-color: rgb(90, 135, 231);
+            border-style: solid;
+            border-color: rgb(90, 135, 231);
+            border-width: 2px;
+            color: white;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .func-btn:hover{
+            background-color: rgb(60, 105, 201);
+            border-color: rgb(60, 105, 201);
+        }
+        .func-btn:active{
+            background-color: rgb(40, 85, 181);
+            border-color: rgb(40, 85, 181);
+        }
+        .func-btn-rev{
+            min-height: 28px;
+            height: fit-content;
+            background-color: white;
+            color: rgb(60, 105, 201);
+            border-style: solid;
+            border-color: rgb(90, 135, 231);
+            border-width: 2px;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .func-btn-rev:hover{
+            background-color: rgb(60, 105, 201);
+            border-color: rgb(60, 105, 201);
+            color: white;
+        }
+        .func-btn-rev:active{
+            background-color: rgb(40, 85, 181);
+            border-color: rgb(40, 85, 181);
+            color: white;
+        }
+        .admin-btn{
+            height: fit-content;
+            min-height: 28px;
+            margin: 5px;
+            background-color: rgb(90, 135, 231);
+            border-style: solid;
+            border-color: rgb(90, 135, 231);
+            border-width: 2px;
+            color: white;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .admin-btn:hover{
+            background-color: rgb(60, 105, 201);
+            border-color: rgb(60, 105, 201);
+        }
+        .admin-btn:active{
+            background-color: rgb(40, 85, 181);
+            border-color: rgb(40, 85, 181);
+        }
+        .active-sus-btn{
+            height: fit-content;
+            min-height: 28px;
+            margin: 5px;
+            background-color: white;
+            border-style: solid;
+            border-color: rgb(90, 135, 231);
+            border-width: 2px;
+            color: rgb(90, 135, 231);
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .active-sus-btn:hover{
+            background-color: rgb(60, 105, 201);
+            border-color: rgb(60, 105, 201);
+            color: white;
+        }
+        .active-sus-btn:active{
+            background-color: rgb(40, 85, 181);
+            border-color: rgb(40, 85, 181);
+            color: white;
+        }
+
+
+        .user-description{
+            height: auto;
+            display: flex;
+            justify-content: center;
+            padding-top: 10px;
+        }
+        .description-box{
+            width: 75%;
+        }
+        .user-description p{
+            display: block;
+            margin: 0;
+        }
+
+
+
+        .superuser-area{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+
+        .post-box{
+            display: grid;
+            grid-template-columns: 80px auto;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            width: 100%;
+            border-bottom-style: solid;
+            border-bottom-color: lightgrey;
+            border-bottom-width: 1px;
+        }
+        .picture-box{
+            background-color: black;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+        }
+        .profile-picture-side{
+            width: 80px;
+            display: flex;
+            justify-content: end;
+            align-items: center;
+        }
+        @media(max-width: 700px){
+            .post-box{
+                grid-template-columns: 60px auto;
+            }
+            .picture-box{
+                height: 40px;
+                width: 40px;
+            }
+            .profile-picture-side{
+                justify-content: center;
+            }
+        }
+        .name-and-content-side{
+            width: 94%;
+            display: grid;
+            grid-template-rows: 30px fit-content 30px;
+            margin-left: 10px;
+        }
+        .username-box{
+            width: 100%;
+            height: 30px;
+            font-weight: 900;
+            display: flex;
+            align-items: end;
+        }
+        .username-box a{
+            text-decoration: none;
+            color: black;
+            margin-right: 14px;
+        }
+        .post-timestamp{
+            font-weight: 100;
+            font-size: 14px;
+            color: grey;
+        }
+        .content-box{
+            width: 100%;
+            padding-right: 10px;
+            display: block;
+            padding-top: -100px;
+            overflow-wrap: anywhere;
+        }
+        .content-box p{
+            display: block;
+            margin: 0;
+        }
+        .comment-btn{
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .options{
+            display: flex;
+            justify-content: end;
+            height: 30px;
+        }
+        .arrow{
+            background: transparent;
+            border: none;
+            margin-right: 4px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .arrow.open{
+            transform: rotate(180deg);
+        }
+
+        .hidden-text{
+            max-width: 0;
+            overflow: hidden;
+            transition: max-width 0.5s ease;
+            display: flex;
+            justify-content: space-between;
+        }
+        .hidden-text.open{
+            max-width: 100%;
+        }
+
+        .option-link{
+            padding-left: 20px;
+            padding-right: 4px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: black;
+        }
+        .block-link{
+            color: red;
+        }
+
+    </style>
+    <title>{{ user.username }} [Uf/v4]</title>
+</head>
+<body>
+    <div class="all">
+        {% include 'basis/base.html' %}
+        <main>
+            {% include 'basis/inter-nav.html' %}
+            <div class="actual-user-page"> <!-- The actual page code starts here -->
+                {% if current_user.role != 0 %}
+                <div class="options"><div class="hidden-text" id="text">
+                    <!-- options -->
+                    <a href="#" class="option-link">{{ t('Share') }}</a>
+                    {% if user != current_user %}
+                        {% if user.role <= 3 %}
+                            {% if user in current_user.blocked_users %}
+                            <a href="{{ url_for('block_user', id=user.id) }}" class="option-link block-link">{{ t('Unblock User') }}</a>
+                            {% else %}
+                            <a href="{{ url_for('block_user', id=user.id) }}" class="option-link block-link">{{ t('Block User') }}</a>
+                            {% endif %}
+                        {% endif %}
+                    <a href="#" class="option-link block-link">{{ t('Report User') }}</a>
+                    {% endif %}
+                </div><button onclick="toggleSlide()" class="arrow" id="arrow"><</button></div>
+                {% endif %}
+                <div class="user-box">
+                    <div class="profile-pic-box">
+                        <div class="profile-pic"></div>
+                    </div>
+                    <div class="name-and-description-box">
+                        <div class="name-and-pronouns-box">
+                            {% if user.id == current_user.id %}
+                            <div class="fullname">
+                                <select id="user-option" class="user-option">
+                                    <option selected hidden>{{ user.fullname }}</option>
+                                    <option value="logout">{{ t('Logout') }}</option>
+                                </select>
+                                {% if user.pronouns %} <div class="pronouns">{{ user.pronouns }}</div> {% endif %}
+                            </div>
+                            {% else %}
+                            <div class="fullname">{{ user.fullname }} {% if user.pronouns %} <div class="pronouns">{{ user.pronouns }}</div> {% endif %} </div>
+                            {% endif %}
+                        </div>
+                        <div class="stats-box">
+                            <div class="likes-box stats-div">
+                                <div class="stats-box-content">
+                                    <div class="stats-number">{{ user.likes_total }}</div>
+                                    <div class="stats-title">{{ t('Likes') }}</div>
+                                </div>
+                            </div>
+                            <div class="follower-box stats-div">
+                                <div class="stats-box-content">
+                                    <div class="stats-number">{{ user.followed_by.count() }}</div>
+                                    <div class="stats-title">{{ t('Followers') }}</div>
+                                </div>
+                            </div>
+                            <div class="following-box stats-div">
+                                <div class="stats-box-content">
+                                    <div class="stats-number">{{ user.following.count() }}</div>
+                                    <div class="stats-title">{{ t('Following') }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="functional-btns">
+                        {% if user.role != 0 and current_user.role != 0 %}
+                            {% if user.id == current_user.id %}
+                            <div class="func-btn-box edit-profile-btn"><a href="{{ url_for('edit_profile_data', id=user.id) }}"><button class="func-btn">{{ t('Edit Profile') }}</button></a></div>
+                            {% else %}
+                                {% if user in current_user.blocked_users %}
+                                <div class="func-btn-box follow-btn"><a href="{{ url_for('block_user', id=user.id) }}"><button class="func-btn-rev">{{ t('Unblock User') }}</button></a></div>
+                                {% else %}
+                                    {% if user in current_user.following %}
+                                    <div class="func-btn-box follow-btn"><a href="{{ url_for('unfollow', user_id=user.id) }}"><button class="func-btn-rev">{{ t('Unfollow') }}</button></a></div>
+                                    {% else %}
+                                    <div class="func-btn-box follow-btn"><a href="{{ url_for('follow', user_id=user.id) }}"><button class="func-btn">{{ t('Follow') }}</button></a></div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    {% if current_user.role >= 2 %}
+                    <!-- Admin buttons -->
+                    <div class="superuser-area">
+                        {% if current_user.role >= 4 and current_user.role >= user.role %}
+                        <a href="{{ url_for('edit_profile_data', id=user.id) }}"><button class="admin-btn">{{ t('Edit Profile') }}</button></a>
+                        {% endif %}
+                        {% if current_user.role >= 2 and user != current_user and current_user.role >= user.role %}
+                            {% if user.role >= 1 %}
+                            <a href="{{ url_for('suspend_user', id=user.id) }}"><button class="admin-btn">{{ t('Suspend Profile') }}</button></a>
+                            {% else %}
+                            <a href="{{ url_for('suspend_user', id=user.id) }}"><button class="active-sus-btn">{{ t('Suspend Profile') }}</button></a>
+                            {% endif %}
+                        {% endif %}
+                        {% if current_user.role >= 4 and current_user.role >= user.role %}
+                        <a><button class="admin-btn">{{ t('Delete Profile') }}</button></a>
+                        {% endif %}
+                    </div>
+                    <!-- Admin Area end -->
+                    {% endif %}
+                {% if user.bio %}
+                    <div class="user-description">
+                        <div class="description-box">
+                        <p>{{ user.bio.replace('\n', '<br>')|safe }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                </div>
+
+                <div class="user-feed">
+                    {% for post in posts %}
+                    <div class="post-box">
+                        <div class="profile-picture-side">
+                            <div class="picture-box"></div>
+                        </div>
+                        <div class="name-and-content-side">
+                            <div class="username-box"><a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a> <div class="post-timestamp">{{ post.timestamp.strftime('%d/%m/%y') }}</div> </div>
+                            <div class="content-box">
+                                <p>{{ post.content.replace('\n', '<br>')|safe }}</p>
+                                <div>
+                                    <a href="{{ url_for('post', id=post.id) }}">
+                                        <button class="comment-btn">
+                                            🗨️<span> {{ post.comments.count() }}</span>
+                                        </button>
+                                    </a>
+                                    {% if post.author == current_user and current_user.role != 0 %}
+                                    <a style="color: red;" href="{{ url_for('delete_post', id=post.id) }}">{{ t('del') }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>                    <!--  The actual page code ends here  -->
+        </main>
+    </div>
+    <script>
+        document.getElementById('user-option').addEventListener('change', function(){
+            const selected = this.value;
+            if (selected === 'logout'){
+                window.location.href = '/logout';
+                localStorage.setItem("searchterm", "");
+            }
+        });
+
+        function toggleSlide(){
+            const text = document.getElementById('text');
+            const arrow = document.getElementById('arrow');
+            text.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+</head>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        font-family: "Nunito", sans-serif;
+    }
+    button{
+        color: black;
+    }
+    select{
+        color: black;
+    }
+    .all{
+        max-width: 750px;
+        min-width: 431px;
+        width: 60%;
+    }
+    nav{
+        padding-left: 30px;
+        padding-right: 30px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background-color: rgb(90, 135, 231);
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    @media(max-width: 700px){
+        .all{
+            width: 100%;
+            overflow-x: hidden;
+        }
+        nav{
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+        main{
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+        }
+    }
+
+    .logo-title{
+        cursor: default;
+    }
+    .functional-side{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: end;
+    }
+    .link-container-admin{
+        width: 100%;
+        min-width: 112px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .link-container{
+        width: 100%;
+        min-width: 112px;
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+    }
+    .logo{
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background-color: black;
+    }
+
+    .dropdown{
+        display: none;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+
+
+    <nav class="navbar" id="navbar">
+        <div class="logo-side">
+            <div class="logo-container">
+                <h2 class="logo-title" title="Amass">Amass</h2>
+            </div>
+        </div>
+        <div class="functional-side">
+            {% if current_user.role >= 2 %} <!-- ! add app settings (admin perspective) -->
+            <div class="link-container-admin">
+                <div class="person-btn-container">
+                    <div class="logo circle-button" title=" "></div>
+                </div>
+                {% if current_user.role >= 3 %}
+                <div class="search-btn-container"> <!-- user and/or post management -->
+                    <a href="{{ url_for('ums') }}"><div class="logo" title="User Management System"></div></a>
+                </div>
+                {% endif %}
+                {% if current_user.role >= 5 %}
+                <div class="notification-btn-container"> <!-- protocol stream (admin perspective) -->
+                    <a href="{{ url_for('protocol_stream') }}"><div class="logo" title="Protocol Stream"></div></a> <!--  technically not a stream yet  -->
+                </div>
+                {% endif %}
+                {% if current_user.role >= 3 %}
+                <div class="tyni-btn-container">
+                    <a href="{{ url_for('code_page_tyni') }}"><div class="logo" title="Tyni"></div></a> <!-- Tyni code page for shortcuts -->
+                </div>
+                {% endif %}
+                <div class="person-btn-container">
+                    <a href="{{ url_for('settings') }}"><div class="logo circle-button" title="{{ t('Settings') }}"></div></a> <!-- general app settings (user perspective) -->
+                </div>
+            </div>
+            {% else %}
+            <div class="link-container">
+                <div class="person-btn-container">
+                    <a href="{{ url_for('settings') }}"><div class="logo circle-button" title="{{ t('Settings') }}"></div></a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
